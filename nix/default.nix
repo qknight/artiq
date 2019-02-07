@@ -15,4 +15,5 @@ in rec {
   llvmlite = callPackage ./pkgs/llvmlite.nix { inherit llvm-or1k; };
   artiq = callPackage ./pkgs/artiq.nix { inherit binutils-or1k; inherit llvm-or1k; inherit llvmlite; };
   openocd = callPackage ./pkgs/openocd.nix {};
+  firmware = callPackage ./firmware.nix { rustPlatform = rust.rustPlatform; };
 }

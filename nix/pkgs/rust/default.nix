@@ -6,7 +6,6 @@
 }:
 
 let
-  rustPlatform = recurseIntoAttrs (makeRustPlatform (callPackage ./bootstrap.nix {}));
   version = "1.28.0";
   cargoVersion = "1.28.0";
   src = fetchFromGitHub {
@@ -18,6 +17,7 @@ let
   };
 in rec {
   # nixcloud team code
+  rustPlatform = recurseIntoAttrs (makeRustPlatform (callPackage ./bootstrap.nix {}));
   or1k-crates = stdenv.mkDerivation {
     name = "or1k-crates";
     inherit src;
