@@ -11,8 +11,8 @@ let
   fetchcargo = import <nixpkgs/pkgs/build-support/rust/fetchcargo.nix> {
     inherit (pkgs) stdenv cacert git rust cargo-vendor;
   };
-  myVendoredSrc1 = fetchcargo rec {
-    name = "myVendoredSrc1";
+  myVendoredSrcFetchCargo = fetchcargo rec {
+    name = "myVendoredSrcFetchCargo";
     sourceRoot = null;
     srcs = null;
     src = ../artiq/firmware;
@@ -21,9 +21,9 @@ let
     sha256 = "1jsb5f5m8p00ikw231sl0i6jg2ilpc2wv1yzi47dgpb54z3gjx3g";
   };
 
-  myVendoredSrc2 = pkgs.stdenv.mkDerivation {
-    name = "myVendoredSrc2";
-    src = myVendoredSrc1;
+  myVendoredSrc = pkgs.stdenv.mkDerivation {
+    name = "myVendoredSrc";
+    src = myVendoredSrcFetchCargo;
     phases = [ "unpackPhase" "installPhase" ];
     installPhase = ''
       mkdir -p $out/.cargo/registry
@@ -55,7 +55,7 @@ let
 
   buildenv = import ./artiq-dev.nix {
     extraProfile = ''
-      export HOME=${myVendoredSrc2}
+      export HOME=${myVendoredSrc}
     '';
     # --no-compile-gateware to disable vivado build
     runScript = "python -m artiq.gateware.targets.kasli -V satellite --no-compile-gateware";
